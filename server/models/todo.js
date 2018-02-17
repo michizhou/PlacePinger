@@ -4,19 +4,22 @@ const timestamps = require('mongoose-timestamp');
 
 const RatingSchema = new mongoose.Schema(
     {
-        task: {
+        name: {
             type: String,
-            required: true,
-            trim: true,
+            required: 'Kindly enter the name of the task'
+        },
+        Created_date: {
+            type: Date,
+            default: Date.now
         },
         status: {
-            type: String,
-            required: true,
-            enum: ['pending', 'complete', 'in progress', 'overdue'],
-            default: 'pending',
-        },
-    },
-    { minimize: false },
+            type: [{
+                type: String,
+                enum: ['pending', 'ongoing', 'completed']
+            }],
+            default: ['pending']
+        }
+    }
 );
 
 RatingSchema.plugin(timestamps);
