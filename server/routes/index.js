@@ -7,14 +7,14 @@ var twilio = require('twilio');
 /**
  * Model Schema
  */
-const Todo = require('../models/todo');
+const Rating = require('../models/todo');
 
 module.exports = function(server) {
 
     /**
      * POST
      */
-    server.post('/todos', (req, res, next) => {
+    server.post('/rating', (req, res, next) => {
         if (!req.is('application/json')) {
         return next(
             new errors.InvalidContentError("Expects 'application/json'"),
@@ -23,7 +23,7 @@ module.exports = function(server) {
 
     let data = req.body || {};
 
-    let todo = new Todo(data);
+    let todo = new Rating(data);
     todo.save(function(err) {
             if (err) {
                 console.error(err);
@@ -37,23 +37,10 @@ module.exports = function(server) {
     });
 
     /**
-     * Twilio POST
-     */
-    server.post('/sms' , function(req, res, next) {
-        var twiml = new MessagingResponse();
-        twiml.message('The Robots are coming! Head for the hills!');
-
-        res.setHeader('Content-Type', 'text/html');
-        res.writeHead(200);
-//        res.header('Content-Type', 'text/xml');
-        return next();
-    });
-
-    /**
      * LIST
      */
-    server.get('/todos', (req, res, next) => {
-        Todo.apiQuery(req.params, function(err, docs) {
+    server.get('/ratings', (req, res, next) => {
+        Rating.apiQuery(req.params, function(err, docs) {
             if (err) {
                 console.error(err);
                 return next(
@@ -69,8 +56,8 @@ module.exports = function(server) {
     /**
      * GET
      */
-    server.get('/todos/:todo_id', (req, res, next) => {
-        Todo.findOne({ _id: req.params.todo_id }, function(err, doc) {
+    server.get('/rating/:rating_id', (req, res, next) => {
+        Todo.findOne({ _id: req.params.rating_id }, function(err, doc) {
             if (err) {
                 console.error(err);
                 return next(
@@ -86,7 +73,7 @@ module.exports = function(server) {
     /**
      * UPDATE
      */
-    server.put('/todos/:todo_id', (req, res, next) => {
+    server.put('/rating/:rating_id', (req, res, next) => {
         if (!req.is('application/json')) {
             return next(
                 new errors.InvalidContentError("Expects 'application/json'"),
@@ -96,10 +83,10 @@ module.exports = function(server) {
         let data = req.body || {};
 
         if (!data._id) {
-            data = Object.assign({}, data, { _id: req.params.todo_id });
+            data = Object.assign({}, data, { _id: req.params.rating_id });
         }
 
-        Todo.findOne({ _id: req.params.todo_id }, function(err, doc) {
+        Rating.findOne({ _id: req.params.rating_id }, function(err, doc) {
             if (err) {
                 console.error(err);
                 return next(
@@ -113,7 +100,7 @@ module.exports = function(server) {
                 );
             }
 
-            Todo.update({ _id: data._id }, data, function(err) {
+            Rating.update({ _id: data._id }, data, function(err) {
                 if (err) {
                     console.error(err);
                     return next(
@@ -130,8 +117,8 @@ module.exports = function(server) {
     /**
      * DELETE
      */
-    server.del('/todos/:todo_id', (req, res, next) => {
-        Todo.remove({ _id: req.params.todo_id }, function(err) {
+    server.del('/rating/:rating_id', (req, res, next) => {
+        Rating.remove({ _id: req.params.rating_id }, function(err) {
             if (err) {
                 console.error(err);
                 return next(

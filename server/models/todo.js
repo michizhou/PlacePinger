@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mongooseStringQuery = require('mongoose-string-query');
 const timestamps = require('mongoose-timestamp');
 
-const TodoSchema = new mongoose.Schema(
+const RatingSchema = new mongoose.Schema(
     {
         task: {
             type: String,
@@ -19,8 +19,8 @@ const TodoSchema = new mongoose.Schema(
     { minimize: false },
 );
 
-TodoSchema.plugin(timestamps);
-TodoSchema.plugin(mongooseStringQuery);
+RatingSchema.plugin(timestamps);
+RatingSchema.plugin(mongooseStringQuery);
 
-const Todo = mongoose.model('Todo', TodoSchema);
-module.exports = Todo;
+const Rating = mongoose.model('Rating', RatingSchema);
+module.exports = Rating;
