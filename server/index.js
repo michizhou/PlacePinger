@@ -12,6 +12,8 @@ var express = require('express'),
     Rating = require('./models/todo'), //created model loading here
     bodyParser = require('body-parser');
 
+var cookieParser = require('cookie-parser');
+
 /**
  * Initialize Server
  */
@@ -58,6 +60,7 @@ const db = mongoose.connection;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 var routes = require('./routes/index.js'); //importing route
 routes(app); //register the route

@@ -1,12 +1,32 @@
 const accountSid = 'AC40b1c97027706d31c345a9f2bd800768';
 const authToken = '7bb80fc990a84e660c7670f5ae29afd1';
 // require the Twilio module and create a REST client
-const client = require('twilio')(accountSid, authToken);
+const Twilio = require('twilio');
+const client = new Twilio(accountSid, authToken);
 
-client.messages
+client.api.calls
     .create({
-        to: '+15878406018',
-        from: '+14167208996',
-        body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+        url: 'http://demo.twilio.com/docs/voice.xml',
+        to: '+14167208996',
+        from: '+15878406018',
     })
-    .then(message => console.log(message.sid));
+    .then(call => console.log(call.sid));
+
+// const http = require('http');
+// const express = require('express');
+// const MessagingResponse = require('twilio').twiml.MessagingResponse;
+//
+// const app = express();
+//
+// app.post('/sms', (req, res) => {
+//     const twiml = new MessagingResponse();
+//
+// twiml.message('The Robots are coming! Head for the hills!');
+//
+// res.writeHead(200, {'Content-Type': 'text/xml'});
+// res.end(twiml.toString());
+// });
+//
+// http.createServer(app).listen(1337, () => {
+//     console.log('Express server listening on port 1337');
+// });
