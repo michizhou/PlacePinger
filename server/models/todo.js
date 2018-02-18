@@ -2,23 +2,25 @@ const mongoose = require('mongoose');
 const mongooseStringQuery = require('mongoose-string-query');
 const timestamps = require('mongoose-timestamp');
 
+const preferanceSchema = new mongoose.Schema(
+    {
+        name: String,
+        frequency: Number,
+        imagePath: String,
+        category: Array
+    }
+);
+
 const RatingSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: 'Kindly enter the name of the task'
+        clientID: {
+            type: String
         },
-        Created_date: {
-            type: Date,
-            default: Date.now
+        interest: {
+            type: String
         },
-        status: {
-            type: [{
-                type: String,
-                enum: ['pending', 'ongoing', 'completed']
-            }],
-            default: ['pending']
-        }
+        preferences: [preferanceSchema]
+
     }
 );
 

@@ -6,4 +6,7 @@ module.exports = {
     db: {
         uri: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/api',
     },
+    accountSid: "AC40b1c97027706d31c345a9f2bd800768",
+    authToken: "7bb80fc990a84e660c7670f5ae29afd1",
+    sendingNumber: "+15878406018"
 };
