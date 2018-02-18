@@ -24,7 +24,7 @@ public class Business {
     private String review_count;
     @SerializedName("categories")
     private List<Category> categories;
-    @SerializedName("rating")
+    @SerializedName("Rating")
     private double rating;
     @SerializedName("coordinates")
     private Coordinates coordinates;

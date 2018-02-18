@@ -9,7 +9,7 @@ import java.util.List;
  * Created by pengcheng on 2/17/18.
  */
 
-public class preferences {
+public class Preference {
     @SerializedName("preferences")
     private ArrayList<Object> preferences;
     @SerializedName("frequency")
@@ -19,7 +19,7 @@ public class preferences {
     @SerializedName("category")
     private ArrayList<String> category;
 
-    public preferences(ArrayList<Object> preferences,int frequency, String name, ArrayList<String> category ){
+    public Preference(ArrayList<Object> preferences, int frequency, String name, ArrayList<String> category ){
         this.preferences = preferences;
         this.frequency = frequency;
         this.name  = name;

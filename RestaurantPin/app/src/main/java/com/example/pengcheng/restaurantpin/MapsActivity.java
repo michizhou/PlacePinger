@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pengcheng.retrofitAPI.model.Preference;
+import com.example.pengcheng.retrofitAPI.model.Rating;
+import com.example.pengcheng.retrofitAPI.restapi.RetrofitAPIService;
 import com.example.pengcheng.yelpapi.model.Business;
 import com.example.pengcheng.yelpapi.model.YelpResponse;
 import com.example.pengcheng.yelpapi.restapi.YelpApiService;
@@ -53,9 +56,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String TAG = com.example.pengcheng.restaurantpin.MapsActivity.class.getSimpleName();
     public static final String BASE_URL = "https://api.yelp.com/v3/";//"http://api.themoviedb.org/3/";
     private static Retrofit retrofit = null;
+    private static Retrofit retrofitMongo = null;
 
     public static List<Business> yelpdata = new ArrayList<Business>();
-
+    public static List<Preference> mongodata = new ArrayList<Preference>();
 
 
     private GoogleMap mMap;
@@ -191,6 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                             }
                         }
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -225,6 +230,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 dataTransfer[0] = mMap;
                 dataTransfer[1] = url;
 
+                if (retrofitMongo == null) {
+                    retrofitMongo = new Retrofit.Builder()
+                            .baseUrl("http://10.194.106.45:3000/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                }
+                RetrofitAPIService retrofitAPIService = retrofitMongo.create(RetrofitAPIService.class);
+                Call<List<Rating>> call = retrofitAPIService.getDatas();
+                call.enqueue(new Callback<List<Rating>>() {
+                    @Override
+                    public void onResponse(Call<List<Rating>> call, Response<List<Rating>> response) {
+//                                for (Preference p : response.body().getPreferences()) {
+//                                    mongodata.add(p);
+//                                    Log.d(TAG, p.getName());
+//                                }
+                        Log.d(TAG, response.body().toString());
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Rating>> call, Throwable t) {
+                        Log.e(TAG, "printing error");
+                        Log.e(TAG, t.toString());
+                    }
+                });
+
+                Call<Integer> SMS = retrofitAPIService.sendSMS();
+                SMS.enqueue(new Callback<Integer>() {
+                    @Override
+                    public void onResponse(Call<Integer> call, Response<Integer> response) {
+                        Log.d(TAG, response.body().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<Integer> call, Throwable t) {
+                        Log.e(TAG, "printing error");
+                        Log.e(TAG, t.toString());
+                    }
+                });
                 getNearbyPlacesData.execute(dataTransfer);
                 Toast.makeText(MapsActivity.this, "Showing Nearby Restaurants", Toast.LENGTH_SHORT).show();
                 break;

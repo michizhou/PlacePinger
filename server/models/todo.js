@@ -6,6 +6,7 @@ const preferanceSchema = new mongoose.Schema(
     {
         name: String,
         frequency: Number,
+        imagePath: String,
         category: Array
     }
 );
@@ -13,6 +14,9 @@ const preferanceSchema = new mongoose.Schema(
 const RatingSchema = new mongoose.Schema(
     {
         clientID: {
+            type: String
+        },
+        interest: {
             type: String
         },
         preferences: [preferanceSchema]

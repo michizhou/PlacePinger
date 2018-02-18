@@ -21,7 +21,6 @@ mongoose.connect(config.db.uri);
 
 const db = mongoose.connection;
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());

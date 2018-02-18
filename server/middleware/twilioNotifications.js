@@ -1,6 +1,4 @@
-var twilioClient = require('../twilioClient');
 var fs = require('fs');
-// var admins = require('../config/administrators.json');
 
 function formatMessage(errorToReport) {
     return '[This is a test] ALERT! It appears the server is' +
@@ -11,9 +9,9 @@ function formatMessage(errorToReport) {
 
 exports.notifyOnError = function(phoneNumber, appError, request, response, next) {
     // admins.forEach(function(admin) {
-        console.log("in the notify");
-        var messageToSend = formatMessage(appError.message);
-        twilioClient.sendSms("+14167208996", messageToSend);
+    console.log("in the notify");
+    var messageToSend = formatMessage(appError.message);
+    // twilioClient.sendSms("+14167208996", messageToSend);
     // });
     next(appError);
 };
