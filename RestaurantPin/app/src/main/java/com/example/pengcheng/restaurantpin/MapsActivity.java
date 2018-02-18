@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pengcheng.yelpapi.model.Business;
+import com.example.pengcheng.yelpapi.model.YelpResponse;
+import com.example.pengcheng.yelpapi.restapi.YelpApiService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -33,12 +36,26 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
+
+    private static final String TAG = com.example.pengcheng.restaurantpin.MapsActivity.class.getSimpleName();
+    public static final String BASE_URL = "https://api.yelp.com/v3/";//"http://api.themoviedb.org/3/";
+    private static Retrofit retrofit = null;
+
+    public static List<Business> yelpdata = new ArrayList<Business>();
+
 
 
     private GoogleMap mMap;
@@ -212,7 +229,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(MapsActivity.this, "Showing Nearby Restaurants", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.B_to:
-                Intent instance2 = new Intent(MapsActivity.this,MainActivity.class);
+                Intent instance2 = new Intent(MapsActivity.this,GraphActivity.class);
                 startActivity(instance2);
 
         }
@@ -228,6 +245,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googlePlaceUrl.append("&type="+nearbyPlace);
         googlePlaceUrl.append("&sensor=true");
         googlePlaceUrl.append("&key="+"AIzaSyBLEPBRfw7sMb73Mr88L91Jqh3tuE4mKsE");
+
+        connectAndGetApiData(longitude, latitude);
+        Log.d(TAG, Integer.toString(yelpdata.size()));
+        for(Business a : yelpdata) {
+            Log.d(TAG,  a.getName());
+        }
 
         Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
 
@@ -277,5 +300,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+    public void connectAndGetApiData(double longitude, double latitude) {
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        YelpApiService yelpApiService = retrofit.create(YelpApiService.class);
+        Call<YelpResponse> call = yelpApiService.getMatchingBusinesses(PROXIMITY_RADIUS,
+                longitude, latitude);
+        call.enqueue(new Callback<YelpResponse>() {
+            @Override
+            public void onResponse(Call<YelpResponse> call, Response<YelpResponse> response) {
+                for (Business b : response.body().getBusinesses()) {
+                    yelpdata.add(b);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<YelpResponse> call, Throwable t) {
+                Log.e(TAG, "printing error");
+                Log.e(TAG, t.toString());
+            }
+        });
     }
 }
