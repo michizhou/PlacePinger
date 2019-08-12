@@ -1,7 +1,5 @@
 # PlacePinger
 
-![alt-text](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/589/896/datas/gallery.jpg)
-
 Inspiration
 
 As college students living on a budget, we have more often than not run into the problems associated with finding a good place to eat or hang out, with the features offered by traditional navigation and social media applications doing little to alleviate our desire for a more hassle-free, organic experience that allows us to enrich our social lives at our own pace and comfort. Through this need for a more immersive tool that caters to our social needs rather than complicates them, we decided to create an application that offered a better approach toward finding nearby restaurants and assess the quality of their cuisine and services through our comprehensive application interface. At the center of its implementation we made use of machine learning algorithms that will help to enhance the culinary experience for students and other individuals wanting to make the most out of life.
